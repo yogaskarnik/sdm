@@ -4,13 +4,17 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node ./app.js",
+    "dev": "nodemon ./app.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "express": "^4.18.2",
-    "mongoose": "^8.2.0"
+    "mongoose": "^8.2.0",
+    "express-session": "^1.17.3",
+    "http-errors": "~1.6.3",
+    "https": "^1.0.0"
   }
 }
