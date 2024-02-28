@@ -58,14 +58,22 @@
           <h1>Quality-of-Service on Demand</h1>
           <form id="qosDemandForm">
             <div class="form-group">
-              <label for="phoneNumber">Enter Phone Number:</label>
+              <label for="phoneNumber">Device:</label>
               <input
                 type="text"
-                class="form-control"
+                class="form-control-sm"
                 id="phoneNumber"
                 name="phoneNumber"
                 required
               />
+              <label for="qosProfile">QoS Profile:</label>
+              <select class="form-control-sm" id="qosProfile" name="qosProfile">
+                <option value="QOS_E">QOS_E</option>
+                <option value="QOS_L">QOS_L</option>
+                <option value="QOS_M">QOS_M</option>
+                <option value="QOS_S">QOS_S</option>
+              </select>
+              <div id="selectedQoSProfile"></div>
             </div>
             <button type="submit" class="btn btn-primary">Submit</button>
           </form>
@@ -78,7 +86,42 @@
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script src="../js/qos-on-demand.js"></script>
     <script>
-      // Get all the menu items
+      document.addEventListener('DOMContentLoaded', () => {
+        const qosProfileSelect = document.getElementById('qosProfile');
+        let selectedQoSProfileDiv =
+          document.getElementById('selectedQoSProfile');
+
+        const updateSelectedQoSProfileText = (value) => {
+          let txt = '';
+          switch (value) {
+            case 'QOS_E':
+              txt =
+                'Maintains stable latency under congestion with limited bandwidth.';
+              break;
+            case 'QOS_L':
+              txt =
+                'Prioritizes the throughput up to a certain higher limit or no explicit limit.';
+              break;
+            case 'QOS_M':
+              txt = 'Prioritizes the throughput up to a certain medium limit.';
+              break;
+            case 'QOS_S':
+              txt = 'Prioritizes the throughput up to a certain lower limit.';
+              break;
+            default:
+              break;
+          }
+          selectedQoSProfileDiv.textContent = txt;
+        };
+        // Event listener for the change event on qosProfileSelect
+        qosProfileSelect.addEventListener('change', (event) => {
+          updateSelectedQoSProfileText(event.target.value);
+        });
+
+        // Manually trigger the change event for the first option on page load
+        updateSelectedQoSProfileText(qosProfileSelect.value);
+      });
+
       const menuItems = document.querySelectorAll('.list-group-item');
 
       // Add click event listener to each menu item

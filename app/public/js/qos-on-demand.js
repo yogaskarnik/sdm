@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
     event.preventDefault();
 
     const phoneNumber = document.getElementById('phoneNumber').value;
+    const qosProfile = document.getElementById('qosProfile').value;
 
     const options = {
       method: 'POST',
@@ -15,9 +16,9 @@ document.addEventListener('DOMContentLoaded', () => {
         'X-RapidAPI-Host': 'quality-of-service-on-demand.nokia.rapidapi.com',
       },
       data: {
-        qosProfile: 'QOS_L',
+        qosProfile: qosProfile,
         device: {
-          phoneNumber: '21431000030',
+          phoneNumber: phoneNumber,
           ipv4Address: {
             publicAddress: '233.252.0.2',
             publicPort: 80,
@@ -42,8 +43,19 @@ document.addEventListener('DOMContentLoaded', () => {
       const tr = document.createElement('tr');
       for (const key in response.data) {
         const th = document.createElement('th');
-        th.textContent = key;
-        tr.appendChild(th);
+        if (key === 'device') {
+          th.textContent = key;
+          tr.appendChild(th);
+        } else if (key === 'applicationServer') {
+          th.textContent = 'Application Server';
+          tr.appendChild(th);
+        } else if (key === 'qosStatus') {
+          th.textContent = 'QoS Status';
+          tr.appendChild(th);
+        } else if (key === 'sessionId') {
+          th.textContent = 'Session Id';
+          tr.appendChild(th);
+        }
       }
       thead.appendChild(tr);
       table.appendChild(thead);
@@ -56,8 +68,14 @@ document.addEventListener('DOMContentLoaded', () => {
         if (key === 'device') {
           td.textContent = response.data.device.phoneNumber;
           trBody.appendChild(td);
-        } else {
-          td.textContent = response.data[key];
+        } else if (key === 'applicationServer') {
+          td.textContent = response.data.applicationServer.ipv4Address;
+          trBody.appendChild(td);
+        } else if (key === 'qosStatus') {
+          td.textContent = response.data.qosStatus;
+          trBody.appendChild(td);
+        } else if (key === 'sessionId') {
+          td.textContent = response.data.sessionId;
           trBody.appendChild(td);
         }
       }
