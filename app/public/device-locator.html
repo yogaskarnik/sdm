@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Device Locator</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+    <style>
+      #map {
+        height: 300px;
+        position: relative;
+      }
+      #field-image {
+        height: 100%;
+        width: 100%;
+      }
+      .marker {
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        transition: background-color 0.3s ease;
+      }
+      .marker.red {
+        background-color: red;
+      }
+      .marker.yellow {
+        background-color: yellow;
+      }
+      .circle {
+        position: absolute;
+        border: 2px solid blue;
+        border-radius: 50%;
+        pointer-events: none; /* Evitar que el círculo afecte a los eventos del ratón */
+      }
+
+      .image-wrapper {
+        background-color: black;
+        width: 15%;
+        height: 30%;
+      }
+      /* Adjust map height as needed */
+    </style>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <a class="navbar-brand" href="index.html">
+        <img
+          src="images/logo.png"
+          alt="Logo"
+          width="250"
+          height="70"
+          class="mr-2"
+        />
+      </a>
+      <span class="navbar-text ml-auto">Powered by</span>
+      <div class="image-wrapper">
+        <img src="images/nokia-nac.png" alt="Nokia" class="mr-2" />
+      </div>
+    </nav>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-3">
+          <div class="list-group mt-3">
+            <a href="#" class="list-group-item list-group-item-action active"
+              >Device Management</a
+            >
+            <a
+              href="location-retrieval.html"
+              class="list-group-item list-group-item-action"
+              >Location Retrieval</a
+            >
+            <a
+              href="qos-on-demand.html"
+              class="list-group-item list-group-item-action"
+              >Service on Demand</a
+            >
+            <a
+              href="add-remove-devices.html"
+              class="list-group-item list-group-item-action"
+              >Add/Remove devices</a
+            >
+            <a
+              href="device-locator.html"
+              class="list-group-item list-group-item-action"
+              >Device Locator</a
+            >
+            <a
+              href="qos-on-demand.html"
+              class="list-group-item list-group-item-action"
+              >Predictive Broadband Allocation</a
+            >
+            <a
+              href="notifications.html"
+              class="list-group-item list-group-item-action"
+              >Notifications</a
+            >
+          </div>
+        </div>
+        <div class="col-md-9">
+          <h1>Device Locator</h1>
+          <form id="locationForm">
+            <div class="form-group">
+              <label for="phoneNumber">Device:</label>
+              <input
+                type="text"
+                class="form-control-sm"
+                id="phoneNumber"
+                name="phoneNumber"
+                required
+              />
+            </div>
+            <button type="submit" class="btn btn-primary">
+              Retrieve Location
+            </button>
+            <button type="button" id="generateRadius" class="btn btn-success">
+              Generate Radius
+            </button>
+            <button
+              onclick="window.location.href='index.html'"
+              class="btn btn-secondary"
+            >
+              Back
+            </button>
+          </form>
+          <br />
+          <br />
+          <div id="field-container">
+            <img
+              id="field-image"
+              src="https://t2.uc.ltmcdn.com/es/posts/9/6/9/cuanto_mide_un_campo_de_futbol_34969_orig.jpg"
+              alt="Football Field Image"
+            />
+            <div id="map"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const locationForm = document.getElementById('locationForm');
+        const mapContainer = document.getElementById('map');
+        const fieldContainer = document.getElementById('field-container');
+        const markers = [];
+        const circles = [];
+
+        locationForm.addEventListener('submit', async (event) => {
+          event.preventDefault();
+
+          const phoneNumber = document.getElementById('phoneNumber').value;
+          let latitude, longitude;
+
+          // Simulated coordinates
+          if (phoneNumber === '21431000030') {
+            latitude = 38;
+            longitude = 30;
+          } else if (phoneNumber === '21431000031') {
+            latitude = 38;
+            longitude = 34;
+          } else if (phoneNumber === '21431000032') {
+            latitude = 38;
+            longitude = 38;
+          } else if (phoneNumber === '21431000033') {
+            latitude = 38;
+            longitude = 80;
+          }
+
+          addMarker(latitude, longitude);
+        });
+
+        document
+          .getElementById('generateRadius')
+          .addEventListener('click', () => {
+            increaseRadius();
+          });
+
+        function addMarker(latitude, longitude) {
+          const fieldImage = document.getElementById('field-image');
+          const fieldImageWidth = fieldImage.offsetWidth;
+          const fieldImageHeight = fieldImage.offsetHeight;
+
+          const markerX = (longitude / 100) * fieldImageWidth;
+          const markerY = (latitude / 100) * fieldImageHeight;
+
+          const marker = document.createElement('div');
+          marker.classList.add('marker');
+          marker.classList.add('red');
+          marker.style.left = `${markerX}px`;
+          marker.style.top = `${markerY}px`;
+
+          fieldContainer.appendChild(marker);
+          markers.push(marker);
+        }
+
+        function increaseRadius() {
+          const radius = 60; /* Ajuste del radio del círculo */
+
+          markers.forEach((marker) => {
+            const markerX = parseFloat(marker.style.left);
+            const markerY = parseFloat(marker.style.top);
+
+            const circleX = markerX - radius + 10;
+            const circleY = markerY - radius + 10;
+
+            const circle = document.createElement('div');
+            circle.classList.add('circle');
+            circle.style.width = `${2 * radius}px`;
+            circle.style.height = `${2 * radius}px`;
+            circle.style.left = `${circleX}px`;
+            circle.style.top = `${circleY}px`;
+
+            fieldContainer.appendChild(circle);
+            circles.push(circle);
+          });
+
+          // Determinar qué marcadores están cerca de los círculos
+          markers.forEach((marker) => {
+            let touched = false;
+            circles.forEach((circle) => {
+              const markerX = parseFloat(marker.style.left) + 10; // Centro del marcador
+              const markerY = parseFloat(marker.style.top) + 10;
+              const circleX = parseFloat(circle.style.left) + radius; // Centro del círculo
+              const circleY = parseFloat(circle.style.top) + radius;
+              const distance = Math.sqrt(
+                Math.pow(markerX - circleX, 2) + Math.pow(markerY - circleY, 2)
+              );
+              if (distance <= 2 * radius) {
+                touched = true;
+              }
+            });
+            if (touched) {
+              marker.classList.remove('red');
+              marker.classList.add('yellow');
+            } else {
+              marker.classList.remove('yellow');
+              marker.classList.add('red');
+            }
+          });
+        }
+      });
+    </script>
+  </body>
+</html>

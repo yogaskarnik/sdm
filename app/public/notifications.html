@@ -12,12 +12,29 @@
       #map {
         height: 300px;
       }
+      .image-wrapper {
+        background-color: black;
+        width: 15%;
+        height: 30%;
+      }
       /* Adjust map height as needed */
     </style>
   </head>
   <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <a class="navbar-brand" href="index.html">Streaming Device Management</a>
+      <a class="navbar-brand" href="index.html">
+        <img
+          src="images/logo.png"
+          alt="Logo"
+          width="250"
+          height="70"
+          class="mr-2"
+        />
+      </a>
+      <span class="navbar-text ml-auto">Powered by</span>
+      <div class="image-wrapper">
+        <img src="images/nokia-nac.png" alt="Nokia" class="mr-2" />
+      </div>
     </nav>
     <div class="container-fluid">
       <div class="row">
@@ -40,6 +57,11 @@
               href="add-remove-devices.html"
               class="list-group-item list-group-item-action"
               >Add/Remove devices</a
+            >
+            <a
+              href="device-locator.html"
+              class="list-group-item list-group-item-action"
+              >Device Locator</a
             >
             <a
               href="qos-on-demand.html"

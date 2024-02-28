@@ -31,7 +31,7 @@ app.use(
 );
 
 app.get('/', (req, res) => {
-  res.send('Hello, welcome to Streaming Device Management!');
+  res.send('Hello, welcome to SportStream!');
 });
 
 app.post('/api/location/retrieve', async (req, res) => {
