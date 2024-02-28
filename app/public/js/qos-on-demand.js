@@ -53,8 +53,13 @@ document.addEventListener('DOMContentLoaded', () => {
       const trBody = document.createElement('tr');
       for (const key in response.data) {
         const td = document.createElement('td');
-        td.textContent = response.data[key];
-        trBody.appendChild(td);
+        if (key === 'device') {
+          td.textContent = response.data.device.phoneNumber;
+          trBody.appendChild(td);
+        } else {
+          td.textContent = response.data[key];
+          trBody.appendChild(td);
+        }
       }
       tbody.appendChild(trBody);
       table.appendChild(tbody);

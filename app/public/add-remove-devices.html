@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Streaming Device Management</title>
+    <title>Add Remove Devices</title>
     <link
       rel="stylesheet"
       href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
@@ -20,12 +20,11 @@
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
       <a class="navbar-brand" href="index.html">Streaming Device Management</a>
     </nav>
-
     <div class="container-fluid">
       <div class="row">
         <div class="col-md-3">
           <div class="list-group mt-3">
-            <a href="#" class="list-group-item list-group-item-action active"
+            <a href="#" class="list-group-item list-group-item-action"
               >Device Management</a
             >
             <a
@@ -56,15 +55,31 @@
           </div>
         </div>
         <div class="col-md-9">
-          <!-- Main content area -->
-          <h1 class="mt-3">Welcome to Hackathon 2024 !</h1>
-          <!-- Add content here -->
+          <h1>Add Remove Devices</h1>
+          <div id="deviceSessionData"></div>
+          <button id="addDeviceButton" class="btn btn-primary mb-3">
+            Add Device
+          </button>
+          <form id="qosDemandForm" style="display: none">
+            <div class="form-group">
+              <label for="phoneNumber">Enter Phone Number:</label>
+              <input
+                type="text"
+                class="form-control"
+                id="phoneNumber"
+                name="phoneNumber"
+                required
+              />
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </form>
+          <div id="tableContainer"></div>
         </div>
       </div>
     </div>
 
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="../js/add-remove-devices.js"></script>
     <script>
       // Get all the menu items
       const menuItems = document.querySelectorAll('.list-group-item');
@@ -80,6 +95,12 @@
           // Add 'active' class to the clicked menu item
           this.classList.add('active');
         });
+      });
+      // Add event listener to the Add Device button
+      const addDeviceButton = document.getElementById('addDeviceButton');
+      const qosDemandForm = document.getElementById('qosDemandForm');
+      addDeviceButton.addEventListener('click', function () {
+        qosDemandForm.style.display = 'block';
       });
     </script>
   </body>
