@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quality-of-Service on Demand</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <style>
+      #map {
+        height: 300px;
+      }
+      /* Adjust map height as needed */
+    </style>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <a class="navbar-brand" href="index.html">Streaming Device Management</a>
+    </nav>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-3">
+          <div class="list-group mt-3">
+            <a href="#" class="list-group-item list-group-item-action"
+              >Device Management</a
+            >
+            <a
+              href="location-retrieval.html"
+              class="list-group-item list-group-item-action"
+              >Location Retrieval</a
+            >
+            <a
+              href="qos-on-demand.html"
+              class="list-group-item list-group-item-action"
+              >Service on Demand</a
+            >
+            <a
+              href="add-remove-devices.html"
+              class="list-group-item list-group-item-action"
+              >Add/Remove devices</a
+            >
+            <a
+              href="qos-on-demand.html"
+              class="list-group-item list-group-item-action"
+              >Predictive Broadband Allocation</a
+            >
+            <a
+              href="notifications.html"
+              class="list-group-item list-group-item-action"
+              >Notifications</a
+            >
+          </div>
+        </div>
+        <div class="col-md-9">
+          <h1>Quality-of-Service on Demand</h1>
+          <form id="locationForm">
+            <div class="form-group">
+              <label for="phoneNumber">Enter Phone Number:</label>
+              <input
+                type="text"
+                class="form-control"
+                id="phoneNumber"
+                name="phoneNumber"
+                required
+              />
+            </div>
+            <button type="submit" class="btn btn-primary">
+              Retrieve Location
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="app.js"></script>
+    <script>
+      // Get all the menu items
+      const menuItems = document.querySelectorAll('.list-group-item');
+
+      // Add click event listener to each menu item
+      menuItems.forEach((item) => {
+        item.addEventListener('click', function (event) {
+          // Remove 'active' class from all menu items
+          menuItems.forEach((item) => {
+            item.classList.remove('active');
+          });
+
+          // Add 'active' class to the clicked menu item
+          this.classList.add('active');
+        });
+      });
+    </script>
+  </body>
+</html>

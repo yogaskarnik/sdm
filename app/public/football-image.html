@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Location Retrieval</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+    <style>
+      #map {
+        width: 100%;
+        height: 500px;
+      }
+      #field-image {
+        width: 100%;
+        height: auto;
+      }
+      .marker {
+        position: absolute;
+        transform: translate(-50%, -50%);
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <a class="navbar-brand" href="index.html">Streaming Device Management</a>
+    </nav>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-3">
+          <div class="list-group mt-3">
+            <a href="#" class="list-group-item list-group-item-action active"
+              >Device Management</a
+            >
+            <a
+              href="location-retrieval.html"
+              class="list-group-item list-group-item-action"
+              >Location Retrieval</a
+            >
+            <a
+              href="qos-on-demand.html"
+              class="list-group-item list-group-item-action"
+              >Service on Demand</a
+            >
+            <a
+              href="add-remove-devices.html"
+              class="list-group-item list-group-item-action"
+              >Add/Remove devices</a
+            >
+            <a
+              href="qos-on-demand.html"
+              class="list-group-item list-group-item-action"
+              >Predictive Broadband Allocation</a
+            >
+            <a
+              href="notifications.html"
+              class="list-group-item list-group-item-action"
+              >Notifications</a
+            >
+          </div>
+        </div>
+        <div class="col-md-9">
+          <h1>Location Retrieval</h1>
+          <form id="locationForm">
+            <div class="form-group">
+              <label for="phoneNumber">Enter Phone Number:</label>
+              <input
+                type="text"
+                class="form-control"
+                id="phoneNumber"
+                name="phoneNumber"
+                required
+              />
+            </div>
+            <button type="submit" class="btn btn-primary">
+              Retrieve Location
+            </button>
+            <button
+              onclick="window.location.href='index.html'"
+              class="btn btn-secondary"
+            >
+              Back
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div id="field-container">
+      <img
+        id="field-image"
+        src="https://thumbs.dreamstime.com/b/classical-stadium-birds-eye-view-drone-view-green-football-soccer-field-aerial-footage-classical-stadium-birds-eye-view-117831608.jpg"
+        alt="Football Field Image"
+      />
+      <div id="map"></div>
+    </div>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const locationForm = document.getElementById('locationForm');
+        const mapContainer = document.getElementById('map');
+        const fieldContainer = document.getElementById('field-container');
+
+        let marker;
+
+        locationForm.addEventListener('submit', async (event) => {
+          event.preventDefault();
+
+          // Retrieve coordinates from the server (simulated)
+          const latitude = 50; // Example latitude
+          const longitude = 50; // Example longitude
+
+          // Remove any existing markers
+          if (marker) {
+            marker.remove();
+          }
+
+          // Calculate marker position relative to the football field image
+          const fieldImage = document.getElementById('field-image');
+          const fieldImageWidth = fieldImage.offsetWidth;
+          const fieldImageHeight = fieldImage.offsetHeight;
+
+          const markerX = (longitude / 100) * fieldImageWidth;
+          const markerY = (latitude / 100) * fieldImageHeight;
+
+          // Create a new marker element
+          marker = document.createElement('div');
+          marker.classList.add('marker');
+          marker.style.left = `${markerX}px`;
+          marker.style.top = `${markerY}px`;
+
+          // Append marker to the field container
+          fieldContainer.appendChild(marker);
+        });
+      });
+    </script>
+  </body>
+</html>

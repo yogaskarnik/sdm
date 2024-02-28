@@ -1,5 +1,5 @@
 # Use the official Node.js image as base
-FROM node:${NODE_V}
+FROM node:20.11.1
 
 # Set the working directory inside the container
 WORKDIR /app
@@ -17,4 +17,4 @@ COPY . .
 EXPOSE ${SERVER_PORT}
 
 # Command to run the application
-CMD ["node", "app.js"]
+CMD ["npm", "run", "dev"]
