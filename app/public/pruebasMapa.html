@@ -3,92 +3,179 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mapa con Marcadores Dinámicos</title>
+    <title>Location Retrieval</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         #map {
+            height: 300px;
             position: relative;
+        }
+        #field-image {
+            height: 100%;
             width: 100%;
-            max-width: 800px; /* Ajusta el tamaño máximo del mapa según tu preferencia */
-            margin: 0 auto; /* Centra el mapa horizontalmente */
-            background-image: url('https://media.istockphoto.com/id/915087622/es/vector/ilustraci%C3%B3n-de-un-campo-de-f%C3%BAtbol-fondo-de-campo-de-campo-o-f%C3%BAtbol-f%C3%BAtbol.jpg?s=612x612&w=0&k=20&c=7Eq1Zhr0bAZt65G6wJ5khcMXCBT7tqZfFdxcH7fvsTM=');
-            background-size: cover;
-            height: 0;
-            padding-top: 56.25%; /* Proporción de aspecto 16:9 (para mantener la relación de aspecto) */
         }
         .marker {
             position: absolute;
             width: 20px;
-            height: 20px;
-            background-color: red;
+            height: 20px; 
             border-radius: 50%;
-            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .marker.red {
+            background-color: red;
+        }
+        .marker.yellow {
+            background-color: yellow;
+        }
+        .circle {
+            position: absolute;
+            border: 2px solid blue;
+            border-radius: 50%;
+            pointer-events: none; /* Evitar que el círculo afecte a los eventos del ratón */
         }
     </style>
 </head>
 <body>
-    <h1>Mapa con Marcadores Dinámicos</h1>
-
-    <form id="locationForm">
-        <label for="phoneNumber">Introduce el número de teléfono:</label>
-        <input type="text" id="phoneNumber" name="phoneNumber" required>
-        <button type="submit">Enviar</button>
-    </form>
-
-    <div id="map">
-        <!-- Aquí se insertarán los marcadores -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="index.html">Streaming Device Management</a>
+    </nav>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="list-group mt-3">
+                    <a href="#" class="list-group-item list-group-item-action active">Device Management</a>
+                    <a href="location-retrieval.html" class="list-group-item list-group-item-action">Location Retrieval</a>
+                    <a href="qos-on-demand.html" class="list-group-item list-group-item-action">Service on Demand</a>
+                    <a href="add-remove-devices.html" class="list-group-item list-group-item-action">Add/Remove devices</a>
+                    <a href="qos-on-demand.html" class="list-group-item list-group-item-action">Predictive Broadband Allocation</a>
+                    <a href="notifications.html" class="list-group-item list-group-item-action">Notifications</a>
+                </div>
+            </div>
+            <div class="col-md-9">
+                <h1>Location Retrieval</h1>
+                <form id="locationForm">
+                    <div class="form-group">
+                        <label for="phoneNumber">Enter Phone Number:</label>
+                        <input type="text" class="form-control" id="phoneNumber" name="phoneNumber" required />
+                    </div>
+                    <button type="submit" class="btn btn-primary">Retrieve Location</button>
+                    <button type="button" id="generateRadius" class="btn btn-success">Generate Radius</button>
+                    <button onclick="window.location.href='index.html'" class="btn btn-secondary">Back</button>
+                </form>
+                <br>
+                <br>
+                <div id="field-container">
+                    <img id="field-image" src="https://t2.uc.ltmcdn.com/es/posts/9/6/9/cuanto_mide_un_campo_de_futbol_34969_orig.jpg" alt="Football Field Image" />
+                    <div id="map"></div>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const locationForm = document.getElementById('locationForm');
-            if (locationForm) {
-                locationForm.addEventListener('submit', async (event) => {
-                    event.preventDefault();
+            const mapContainer = document.getElementById('map');
+            const fieldContainer = document.getElementById('field-container');
+            const markers = [];
+            const circles = [];
 
-                    const phoneNumber = document.getElementById('phoneNumber').value;
-                    console.log('Phone Number:', phoneNumber); // Debugging statement
-                    try {
-                        const options = {
-                            method: 'POST',
-                            url: 'https://location-retrieval.p-eu.rapidapi.com/retrieve',
-                            headers: {
-                                'content-type': 'application/json',
-                                'X-RapidAPI-Key':
-                                    '045a41f880msh934bba06750a7c5p137aadjsnd3cbc9a8e472',
-                                'X-RapidAPI-Host': 'location-retrieval.nokia.rapidapi.com',
-                            },
-                            data: {
-                                device: {
-                                    phoneNumber: phoneNumber,
-                                },
-                                maxAge: '60',
-                            },
-                        };
+            locationForm.addEventListener('submit', async (event) => {
+                event.preventDefault();
+                
+                const phoneNumber = document.getElementById('phoneNumber').value;
+                let latitude, longitude;
 
-                        const response = await axios(options);
-                        console.log('Response:', response.data); // Debugging statement
-                        const latitude = response.data.area.center.latitude;
-                        const longitude = response.data.area.center.longitude;
-                        const addressName = response.data.civicAddress.A1;
-                        addMarker(latitude, longitude, addressName);
-                    } catch (error) {
-                        console.error('Error retrieving location:', error);
+                // Simulated coordinates
+                if (phoneNumber === '21431000030') {
+                    latitude = 38;
+                    longitude = 30;
+                } else if (phoneNumber === '21431000031') {
+                    latitude = 38;
+                    longitude = 34;
+                } else if (phoneNumber === '21431000032') {
+                    latitude = 38;
+                    longitude = 38;
+                } else if (phoneNumber === '21431000033') {
+                    latitude = 38;
+                    longitude = 80;
+                }
+
+
+                addMarker(latitude, longitude);
+            });
+
+            document.getElementById('generateRadius').addEventListener('click', () => {
+                increaseRadius();
+            });
+
+            function addMarker(latitude, longitude) {
+               
+                const fieldImage = document.getElementById('field-image');
+                const fieldImageWidth = fieldImage.offsetWidth;
+                const fieldImageHeight = fieldImage.offsetHeight;
+
+                const markerX = (longitude / 100) * fieldImageWidth;
+                const markerY = (latitude / 100) * fieldImageHeight;
+
+                
+                const marker = document.createElement('div');
+                marker.classList.add('marker');
+                marker.classList.add('red'); 
+                marker.style.left = `${markerX}px`;
+                marker.style.top = `${markerY}px`;
+
+                fieldContainer.appendChild(marker);
+                markers.push(marker);
+            }
+
+            function increaseRadius() {
+                const radius = 60; /* Ajuste del radio del círculo */
+
+                markers.forEach(marker => {
+                    const markerX = parseFloat(marker.style.left);
+                    const markerY = parseFloat(marker.style.top);
+
+                    
+                    const circleX = markerX - radius + 10;
+                    const circleY = markerY - radius + 10;
+
+                    const circle = document.createElement('div');
+                    circle.classList.add('circle');
+                    circle.style.width = `${2 * radius}px`;
+                    circle.style.height = `${2 * radius}px`;
+                    circle.style.left = `${circleX}px`;
+                    circle.style.top = `${circleY}px`;
+
+                    fieldContainer.appendChild(circle);
+                    circles.push(circle);
+                });
+
+                // Determinar qué marcadores están cerca de los círculos
+                markers.forEach(marker => {
+                    let touched = false;
+                    circles.forEach(circle => {
+                        const markerX = parseFloat(marker.style.left) + 10; // Centro del marcador
+                        const markerY = parseFloat(marker.style.top) + 10;
+                        const circleX = parseFloat(circle.style.left) + radius; // Centro del círculo
+                        const circleY = parseFloat(circle.style.top) + radius;
+                        const distance = Math.sqrt(Math.pow(markerX - circleX, 2) + Math.pow(markerY - circleY, 2));
+                        if (distance <= 2 * radius) {
+                            touched = true;
+                        }
+                    });
+                    if (touched) {
+                        marker.classList.remove('red');
+                        marker.classList.add('yellow');
+                    } else {
+                        marker.classList.remove('yellow');
+                        marker.classList.add('red');
                     }
                 });
             }
         });
-
-        // Función para añadir un marcador en el mapa
-        function addMarker(latitude, longitude, addressName) {
-            const map = document.getElementById('map');
-            const marker = document.createElement('div');
-            marker.classList.add('marker');
-            marker.style.left = `${longitude}%`; // Se ajusta la posición horizontal del marcador según la longitud
-            marker.style.top = `${latitude}%`; // Se ajusta la posición vertical del marcador según la latitud
-            marker.title = addressName;
-            map.appendChild(marker);
-        }
     </script>
 </body>
 </html>

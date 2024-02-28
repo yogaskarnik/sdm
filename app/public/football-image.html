@@ -99,41 +99,79 @@
 
     <script>
       document.addEventListener('DOMContentLoaded', () => {
-        const locationForm = document.getElementById('locationForm');
-        const mapContainer = document.getElementById('map');
-        const fieldContainer = document.getElementById('field-container');
+            const locationForm = document.getElementById('locationForm');
+            const mapContainer = document.getElementById('map');
+            const fieldContainer = document.getElementById('field-container');
+            /*
+            if (locationForm) {
+                locationForm.addEventListener('submit', async (event) => {
+                    event.preventDefault();
 
-        let marker;
+                    const phoneNumber = document.getElementById('phoneNumber').value;
+                    console.log('Phone Number:', phoneNumber); // Debugging statement
+                    try {
+                        const options = {
+                            method: 'POST',
+                            url: 'https://location-retrieval.p-eu.rapidapi.com/retrieve',
+                            headers: {
+                                'content-type': 'application/json',
+                                'X-RapidAPI-Key':
+                                    '045a41f880msh934bba06750a7c5p137aadjsnd3cbc9a8e472',
+                                'X-RapidAPI-Host': 'location-retrieval.nokia.rapidapi.com',
+                            },
+                            data: {
+                                device: {
+                                    phoneNumber: phoneNumber,
+                                },
+                                maxAge: '60',
+                            },
+                        };
 
-        locationForm.addEventListener('submit', async (event) => {
-          event.preventDefault();
+                        const response = await axios(options);
+                        console.log('Response:', response.data);
+                        const latitude = response.data.area.center.latitude;
+                        const longitude = response.data.area.center.longitude;
+                        const addressName = response.data.civicAddress.A1;
+                        addMarker(latitude, longitude, addressName);
+                    } catch (error) {
+                        console.error('Error retrieving location:', error);
+                    }
+                });
+            }
+            */
+        
 
-          // Retrieve coordinates from the server (simulated)
-          const latitude = 50; // Example latitude
-          const longitude = 50; // Example longitude
+        function addMarker(latitude, longitude) {
 
-          // Remove any existing markers
-          if (marker) {
-            marker.remove();
-          }
+                // Retrieve coordinates from the server (simulated)
+                //const latitude = 50; // Example latitude
+                //const longitude = 42; // Example longitude
 
-          // Calculate marker position relative to the football field image
-          const fieldImage = document.getElementById('field-image');
-          const fieldImageWidth = fieldImage.offsetWidth;
-          const fieldImageHeight = fieldImage.offsetHeight;
+                // Calculate marker position relative to the football field image
+                const fieldImage = document.getElementById('field-image');
+                const fieldImageWidth = fieldImage.offsetWidth;
+                const fieldImageHeight = fieldImage.offsetHeight;
 
-          const markerX = (longitude / 100) * fieldImageWidth;
-          const markerY = (latitude / 100) * fieldImageHeight;
+                const markerX = (longitude / 100) * fieldImageWidth;
+                const markerY = (latitude / 100) * fieldImageHeight;
 
-          // Create a new marker element
-          marker = document.createElement('div');
-          marker.classList.add('marker');
-          marker.style.left = `${markerX}px`;
-          marker.style.top = `${markerY}px`;
+                // Create a new marker element
+                const marker = document.createElement('div');
+                marker.classList.add('marker');
+                marker.style.left = `${markerX}px`;
+                marker.style.top = `${markerY}px`;
 
-          // Append marker to the field container
-          fieldContainer.appendChild(marker);
-        });
+                // Append marker to the field container
+                fieldContainer.appendChild(marker);
+        }
+        if (locationForm) {
+                locationForm.addEventListener('submit', async (event) => {
+                    event.preventDefault();
+
+                    const phoneNumber = document.getElementById('phoneNumber').value;
+                }
+      )};
+        addMarker(latitude, longitude);
       });
     </script>
   </body>
