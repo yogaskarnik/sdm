@@ -60,50 +60,6 @@ app.post('/api/location/retrieve', async (req, res) => {
   }
 });
 
-// Define an endpoint to handle area selection requests
-app.post('/api/area-selection', async (req, res) => {
-  try {
-    const options = {
-      method: 'POST',
-      url: 'https://quality-of-service-on-demand.p-eu.rapidapi.com/sessions',
-      headers: {
-        'content-type': 'application/json',
-        'X-RapidAPI-Key': '4ed0e194d0mshff39531bdaec257p1136e1jsnd62933539b8d',
-        'X-RapidAPI-Host': 'quality-of-service-on-demand.nokia.rapidapi.com',
-      },
-      data: {
-        qosProfile: 'QOS_L',
-        device: {
-          phoneNumber: '21431000030',
-          ipv4Address: {
-            publicAddress: '233.252.0.2',
-            publicPort: 80,
-          },
-        },
-        applicationServer: {
-          ipv4Address: '233.252.0.2',
-        },
-        notificationUrl: 'https://example.com',
-      },
-    };
-
-    try {
-      const response = await axios.request(options);
-      console.log(`QoS ${response}`);
-    } catch (error) {
-      console.error(error);
-    }
-
-    // Implement logic to interact with QoS API and Location Verification API
-    // Send requests to allocate bandwidth and verify the selected area
-
-    // Return success response if everything goes well
-  } catch (error) {
-    console.error('Error selecting area:', error);
-    res.status(500).json({ success: false, message: 'Failed to select area' });
-  }
-});
-
 app.get('/api/event-subscription', async (req, res) => {
   // Configuration for the external API request
   const options = {
