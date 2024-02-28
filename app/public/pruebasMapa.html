@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa con Marcadores Dinámicos</title>
+    <style>
+        #map {
+            position: relative;
+            width: 100%;
+            max-width: 800px; /* Ajusta el tamaño máximo del mapa según tu preferencia */
+            margin: 0 auto; /* Centra el mapa horizontalmente */
+            background-image: url('https://media.istockphoto.com/id/915087622/es/vector/ilustraci%C3%B3n-de-un-campo-de-f%C3%BAtbol-fondo-de-campo-de-campo-o-f%C3%BAtbol-f%C3%BAtbol.jpg?s=612x612&w=0&k=20&c=7Eq1Zhr0bAZt65G6wJ5khcMXCBT7tqZfFdxcH7fvsTM=');
+            background-size: cover;
+            height: 0;
+            padding-top: 56.25%; /* Proporción de aspecto 16:9 (para mantener la relación de aspecto) */
+        }
+        .marker {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: red;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Mapa con Marcadores Dinámicos</h1>
+
+    <form id="locationForm">
+        <label for="phoneNumber">Introduce el número de teléfono:</label>
+        <input type="text" id="phoneNumber" name="phoneNumber" required>
+        <button type="submit">Enviar</button>
+    </form>
+
+    <div id="map">
+        <!-- Aquí se insertarán los marcadores -->
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const locationForm = document.getElementById('locationForm');
+            if (locationForm) {
+                locationForm.addEventListener('submit', async (event) => {
+                    event.preventDefault();
+
+                    const phoneNumber = document.getElementById('phoneNumber').value;
+                    console.log('Phone Number:', phoneNumber); // Debugging statement
+                    try {
+                        const options = {
+                            method: 'POST',
+                            url: 'https://location-retrieval.p-eu.rapidapi.com/retrieve',
+                            headers: {
+                                'content-type': 'application/json',
+                                'X-RapidAPI-Key':
+                                    '045a41f880msh934bba06750a7c5p137aadjsnd3cbc9a8e472',
+                                'X-RapidAPI-Host': 'location-retrieval.nokia.rapidapi.com',
+                            },
+                            data: {
+                                device: {
+                                    phoneNumber: phoneNumber,
+                                },
+                                maxAge: '60',
+                            },
+                        };
+
+                        const response = await axios(options);
+                        console.log('Response:', response.data); // Debugging statement
+                        const latitude = response.data.area.center.latitude;
+                        const longitude = response.data.area.center.longitude;
+                        const addressName = response.data.civicAddress.A1;
+                        addMarker(latitude, longitude, addressName);
+                    } catch (error) {
+                        console.error('Error retrieving location:', error);
+                    }
+                });
+            }
+        });
+
+        // Función para añadir un marcador en el mapa
+        function addMarker(latitude, longitude, addressName) {
+            const map = document.getElementById('map');
+            const marker = document.createElement('div');
+            marker.classList.add('marker');
+            marker.style.left = `${longitude}%`; // Se ajusta la posición horizontal del marcador según la longitud
+            marker.style.top = `${latitude}%`; // Se ajusta la posición vertical del marcador según la latitud
+            marker.title = addressName;
+            map.appendChild(marker);
+        }
+    </script>
+</body>
+</html>
