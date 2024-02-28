@@ -46,6 +46,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (key === 'device') {
           th.textContent = key;
           tr.appendChild(th);
+        } else if (key === 'qosProfile') {
+          th.textContent = 'QoS Profile';
+          tr.appendChild(th);
         } else if (key === 'applicationServer') {
           th.textContent = 'Application Server';
           tr.appendChild(th);
@@ -70,6 +73,9 @@ document.addEventListener('DOMContentLoaded', () => {
           trBody.appendChild(td);
         } else if (key === 'applicationServer') {
           td.textContent = response.data.applicationServer.ipv4Address;
+          trBody.appendChild(td);
+        } else if (key === 'qosProfile') {
+          td.textContent = response.data.qosProfile;
           trBody.appendChild(td);
         } else if (key === 'qosStatus') {
           td.textContent = response.data.qosStatus;
