@@ -3,7 +3,7 @@
 This project was developed for a HACKATHON in Mobile World Congress 20224.
 
 
-We were asked to use an API[1] developed by Nokia to design a real world use case. 
+We were asked to use [Nokia API]([https://pages.github.com/](https://developer.networkascode.nokia.io/) developed by Nokia to design a real world use case. 
 
 Our usecase:
 The idea consists of having an all-in-one platform for streamings applicable in multiple areas.
@@ -15,7 +15,6 @@ Features offered:
 - Predictive Broadband Allocation for Area-Based Broadband Connection (QoS)
 - Sending Notifications to Selected Devices (Device Status)
 
+### Home page of the application:
+<img width="1501" alt="image" src="https://github.com/yogaskarnik/streaming-device-management/assets/8651540/5a996bb5-d374-44ec-9265-34e5456d6257">
 
-
-[1]
-https://developer.networkascode.nokia.io/
