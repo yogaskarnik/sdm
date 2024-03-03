@@ -2,13 +2,13 @@
 
 This project was developed for a HACKATHON in Mobile World Congress 20224.
 
+### Objective
+We were asked to use [Nokia API](https://developer.networkascode.nokia.io/) developed by Nokia to design a real world use case. 
 
-We were asked to use [Nokia API]([https://pages.github.com/](https://developer.networkascode.nokia.io/) developed by Nokia to design a real world use case. 
-
-Our usecase:
+### Our usecase:
 The idea consists of having an all-in-one platform for streamings applicable in multiple areas.
 
-Features offered:
+### Features developed:
 - Geo-Tracking Panel for selected devices  (Location Retrieval & Location Verification)
 - Area Selection for Dynamic Broadband management (QoS & Location Verification)
 - Add/Remove devices into the SDM System (Device Status?)
